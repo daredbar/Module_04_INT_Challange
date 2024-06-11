@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Module_04_INT_Challange - Mod_04_INT_A</Text>
+    <Description>Some description for Module_04_INT_Challange</Description>
+    <Assembly>Module_04_INT_Challange.dll</Assembly>
+    <FullClassName>Module_04_INT_Challange.Mod_04_INT_A</FullClassName>
+    <ClientId>a27b7f89-3972-4b69-935b-cff70e30f461</ClientId>
+    <VendorId>com.YOUR COMPANY NAME</VendorId>
+    <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+    <Text>Module_04_INT_Challange - Mod_04_INT_B</Text>
+    <Description>Some description for Module_04_INT_Challange</Description>
+    <Assembly>Module_04_INT_Challange.dll</Assembly>
+    <FullClassName>Module_04_INT_Challange.Mod_04_INT_B</FullClassName>
+    <ClientId>754fa675-96e9-479c-bf2e-90349cf49dcb</ClientId>
+    <VendorId>com.YOUR COMPANY NAME</VendorId>
+    <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
+  </AddIn>
+  <AddIn Type="Command">
+	<Text>Module_04_INT_Challange - Mod_04_INT_C</Text>
+	<Description>Some description for Module_04_INT_Challange</Description>
+	<Assembly>Module_04_INT_Challange.dll</Assembly>
+	<FullClassName>Module_04_INT_Challange.Mod_04_INT_C</FullClassName>
+	<ClientId>87297007-F0AA-45BC-9B1C-7C88736F24D1</ClientId>
+	<VendorId>com.YOUR COMPANY NAME</VendorId>
+	<VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Module_04_INT_Challange</Name>
+    <Assembly>Module_04_INT_Challange.dll</Assembly>
+    <FullClassName>Module_04_INT_Challange.App</FullClassName>
+    <ClientId>883ba85f-6b45-4777-93a8-57b3973ecf34</ClientId>
+    <VendorId>com.YOUR COMPANY NAME</VendorId>
+    <VendorDescription>YOUR COMPANY NAME, YOUR COMPANY URL</VendorDescription>
+  </AddIn>
+</RevitAddIns>
