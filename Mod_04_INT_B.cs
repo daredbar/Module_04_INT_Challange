@@ -2,6 +2,8 @@
 using Autodesk.Revit.ApplicationServices;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Architecture;
+using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using System;
@@ -37,7 +39,7 @@ namespace Module_04_INT_Challange
 
             if (ofd.ShowDialog() != Forms.DialogResult.OK)
                 return Result.Failed;
-            
+
             revitFile = ofd.FileName;
 
             // Open selected file in background
@@ -49,48 +51,67 @@ namespace Module_04_INT_Challange
 
             TaskDialog.Show("Copy Model Groups", $"There are {modelGroupCollector.Count()} groups in the model I just opened");
 
-            // Make other document active then close document
-            uiapp.OpenAndActivateDocument(doc.PathName);
-            closedDoc.Close(false);
 
             // inserting groups
             // get group type
-            string groupName1 = "Group 1";
-            string groupName2 = "Group 2";
-            string groupName3 = "Group 3";
+            GroupType curGroupA = GetGroupTypeByName(closedDoc, "GroupA");
+            GroupType curGroupB = GetGroupTypeByName(closedDoc, "GroupB");
+            GroupType curGroupC = GetGroupTypeByName(closedDoc, "GroupC");
 
-            GroupType curGroup1 = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_IOSModelGroups)
-                .WhereElementIsElementType()
-                .Where(r => r.Name == groupName1)
-                .Cast<GroupType>().First();
-
-            GroupType curGroup2 = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_IOSModelGroups)
-                .WhereElementIsElementType()
-                .Where(r => r.Name == groupName2)
-                .Cast<GroupType>().First();
-
-            GroupType curGroup3 = new FilteredElementCollector(doc)
-                .OfCategory(BuiltInCategory.OST_IOSModelGroups)
-                .WhereElementIsElementType()
-                .Where(r => r.Name == groupName3)
-                .Cast<GroupType>().First();
-
-            // insert group
-            XYZ insPoint = new XYZ();
+            //Loop through Spaces
+            FilteredElementCollector curSpace = new FilteredElementCollector(doc);
+            curSpace.OfClass(typeof(SpatialElement)).WhereElementIsNotElementType();
 
             using (Transaction t = new Transaction(doc))
             {
                 t.Start("Place Group");
 
-                doc.Create.PlaceGroup(insPoint, curGroup);
+                foreach (SpatialElement space in curSpace)
+                {
+                    // get room data
+                    string spaceComm = space.LookupParameter("Comments").AsString();
+
+                    // get room location point
+                    LocationPoint spacePoint = space.Location as LocationPoint;
+                    // insert group
+                    XYZ insPoint = new XYZ();
+
+                    //TaskDialog.Show("Test", $"{spaceComm}");
+
+
+                    switch (spaceComm)
+                    {
+                        case "GroupA":
+                            doc.Create.PlaceGroup(insPoint, curGroupA);
+                            break;
+                        case "GroupB":
+                            doc.Create.PlaceGroup(insPoint, curGroupB);
+                            break;
+                        case "GroupC":
+                            doc.Create.PlaceGroup(insPoint, curGroupC);
+                            break;
+                    }
+                }
 
                 t.Commit();
             }
 
+            // Make other document active then close document
+            uiapp.OpenAndActivateDocument(doc.PathName);
+            closedDoc.Close(false);
+
+
+
 
             return Result.Succeeded;
+        }
+
+        public static GroupType GetGroupTypeByName(Document doc, string groupName)
+        {
+            return new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_IOSModelGroups) 
+                .WhereElementIsElementType().Where(r => r.Name == groupName)
+                .Cast<GroupType>().First();
         }
 
         public static String GetMethod()
