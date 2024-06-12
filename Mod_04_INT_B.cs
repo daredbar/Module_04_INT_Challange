@@ -51,22 +51,21 @@ namespace Module_04_INT_Challange
 
             TaskDialog.Show("Copy Model Groups", $"There are {modelGroupCollector.Count()} groups in the model I just opened");
 
-
-            // inserting groups
-            // get group type
-            GroupType curGroupA = GetGroupTypeByName(closedDoc, "GroupA");
-            GroupType curGroupB = GetGroupTypeByName(closedDoc, "GroupB");
-            GroupType curGroupC = GetGroupTypeByName(closedDoc, "GroupC");
-
-            //Loop through Spaces
-            FilteredElementCollector curSpace = new FilteredElementCollector(doc);
-            curSpace.OfClass(typeof(SpatialElement)).WhereElementIsNotElementType();
-
             using (Transaction t = new Transaction(doc))
             {
                 t.Start("Place Group");
 
-                foreach (SpatialElement space in curSpace)
+                // inserting groups
+                // get group type
+                GroupType curGroupA = GetGroupTypeByName(closedDoc, "GroupA");
+                GroupType curGroupB = GetGroupTypeByName(closedDoc, "GroupB");
+                GroupType curGroupC = GetGroupTypeByName(closedDoc, "GroupC");
+
+                //Loop through Spaces
+                FilteredElementCollector curSpace = new FilteredElementCollector(doc);
+                curSpace.OfCategory(BuiltInCategory.OST_MEPSpaces);
+
+                foreach (Space space in curSpace)
                 {
                     // get room data
                     string spaceComm = space.LookupParameter("Comments").AsString();
@@ -74,12 +73,16 @@ namespace Module_04_INT_Challange
                     // get room location point
                     LocationPoint spacePoint = space.Location as LocationPoint;
                     // insert group
-                    XYZ insPoint = new XYZ();
+                    XYZ insPoint = spacePoint.Point;
 
                     //TaskDialog.Show("Test", $"{spaceComm}");
 
+                    //if (spaceComm == "GroupA")
+                    //{
+                    //    doc.Create.PlaceGroup(insPoint, curGroupA);
+                    //}
 
-                    switch (spaceComm)
+                    switch (spaceComm.Trim())
                     {
                         case "GroupA":
                             doc.Create.PlaceGroup(insPoint, curGroupA);
