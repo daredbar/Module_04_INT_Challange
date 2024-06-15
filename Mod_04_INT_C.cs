@@ -32,18 +32,24 @@ namespace Module_04_INT_Challange
             // Loop through open documents and look for match
             foreach (Document curDoc in uiapp.Application.Documents)
             {
-                if (curDoc.PathName.Contains("LON05-STRC-D-R23"))
+                if (curDoc.PathName.Contains("Sample 03"))
                     openDoc = curDoc;
             }
 
             // copy elements from other doc
             // create filtered element collector to get elements
-            FilteredElementCollector collector = new FilteredElementCollector(openDoc)
-                .OfCategory(BuiltInCategory.OST_Walls)
-                .WhereElementIsNotElementType();
+            FilteredElementCollector collector = new FilteredElementCollector(openDoc);
+
+            List<BuiltInCategory> catList = new List<BuiltInCategory>();
+            catList.Add(BuiltInCategory.OST_Walls);
+            catList.Add(BuiltInCategory.OST_GenericModel);
+
+            ElementMulticategoryFilter catFilter = new ElementMulticategoryFilter(catList);
+            collector.WherePasses(catFilter).WhereElementIsNotElementType();
 
             // get list of element Ids
             List<ElementId> elemIdList = collector.Select(elem =>  elem.Id).ToList();
+            int elementCount = elemIdList.Count;
 
             // copy element
             CopyPasteOptions options = new CopyPasteOptions();
@@ -57,6 +63,8 @@ namespace Module_04_INT_Challange
                 t.Commit();
             }
 
+            // Display the number of copied elements
+            TaskDialog.Show("Copy Elements", $"Number of elemets copied: {elementCount}");
 
             return Result.Succeeded;
         }
